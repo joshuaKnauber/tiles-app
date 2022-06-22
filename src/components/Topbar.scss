@@ -1,0 +1,41 @@
+.topbar-left {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    align-items: center;
+    gap: 1rem;
+
+    h1 {
+        margin: 0rem;
+        font-size: 1.1rem;
+    }
+}
+
+.tiles-name-inp {
+    padding: 0rem;
+    margin: 0rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-main);
+    font-size: 1.1rem;
+    font-weight: 600;
+    width: 10rem;
+}
+
+.status {
+    font-size: .75rem;
+    padding: .2rem .5rem;
+    background-color: var(--accent-neutral--overlay);
+    border-radius: .4rem;
+    color: var(--accent-neutral);
+    border: .1rem solid;
+    border-color: var(--accent-neutral);
+    user-select: none;
+    
+    &.positive {
+        background-color: var(--accent-success--overlay);
+        color: var(--accent-success);
+        border-color: var(--accent-success);
+    }
+}

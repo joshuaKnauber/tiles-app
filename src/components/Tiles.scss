@@ -1,0 +1,71 @@
+$topbar-height: 3.5rem;
+
+.page {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+
+    .topbar-container {
+        height: 3rem;
+        min-height: $topbar-height;
+        background-color: var(--bg-container);
+        z-index: 4;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0rem 1rem;
+    }
+    
+    .content {
+        flex: 1;
+        max-height: calc(100% - $topbar-height);
+        display: flex;
+        position: relative;
+        flex-direction: row;
+        
+        .content-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            background-color: var(--bg-container);
+            z-index: 10;
+            opacity: .8;
+        }
+    }
+
+
+    .grid-container {
+        flex: 1;
+        height: 100%;
+        overflow-x: auto;
+        overflow-y: auto;
+        background-color: var(--bg-container);
+        user-select: none;
+    }
+
+    .settings-container {
+        width: 0px;
+        min-width: 0px;
+        transition: width .15s ease-in-out, min-width .15s ease-in-out;
+        overflow: hidden;
+        background-color: var(--bg-main);
+        z-index: 3;
+        
+        &.visible {
+            min-width: 600px;
+            width: 600px;
+        }
+        
+        @media (max-width: 800px) {
+            &.visible {
+                min-width: 100%;
+                width: 100%;
+            }
+        }
+    }
+}
+
