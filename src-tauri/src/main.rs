@@ -79,7 +79,7 @@ fn track_device_input(window: Window, vid:u16, pid:u16) {
       Ok(res) => {
         println!("Read: {:?}", &buf[..res]);
         window.emit("received-data", PayloadData { data: buf[..res][0] }).unwrap();
-        thread::sleep(Duration::from_millis(1000));
+        //thread::sleep(Duration::from_millis(1000));
       },
       Err(error) => {
         println!("Problem opening the file: {:?}", error);
