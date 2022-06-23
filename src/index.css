@@ -3,7 +3,6 @@
 
   --bg-main: hsl(220, 15%, 90%);
   --bg-container: hsl(220, 20%, 95%);
-  --bg-dialog: hsl(220, 20%, 98%);
     
   --bg-main--overlay: rgba(0, 0, 0, 0.2);
   --bg-container--overlay: rgba(0, 0, 0, 0.5);
@@ -24,8 +23,7 @@
     --window: black;
     
     --bg-main: rgb(10, 10, 12);
-    --bg-container: rgb(16, 16, 18);
-    --bg-dialog: rgb(34, 34, 38);
+    --bg-container: rgb(24, 24, 28);
     
     --bg-main--overlay: rgba(255, 255, 255, 0.2);
     --bg-container--overlay: rgba(255, 255, 255, 0.5);

@@ -11,6 +11,24 @@
     }
 }
 
+.topbar-right {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.btn-settings {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-main);
+}
+
 .tiles-name-inp {
     padding: 0rem;
     margin: 0rem;

@@ -3,14 +3,20 @@
   windows_subsystem = "windows"
 )]
 
-use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayEvent, UserAttentionType, Window, WindowEvent, Manager};
-
-use std::thread;
-
-extern crate hidapi;
+use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayEvent, UserAttentionType, Window, WindowEvent, Manager, State};
 
 use std::process::Command;
 use std::time::Duration;
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+use pickledb::{PickleDb, PickleDbDumpPolicy, SerializationMethod};
+
+extern crate hidapi;
+
+
+#[derive(Default)]
+struct AppState(Arc<Mutex<bool>>);
 
 #[derive(Clone, serde::Serialize)]
 struct PayloadStatus {
@@ -32,6 +38,19 @@ fn simulate_key(volume: u8, ahk_path: &str, script_path: &str) {
     .expect("failed to execute process");
 }
 
+#[tauri::command]
+fn update_ahk_path(path: String) {
+  println!("path {}", path);
+  //let db = PickleDb::new("settings.db", PickleDbDumpPolicy::AutoDump, SerializationMethod::Json);
+  //db.set("ahk-path", &path).unwrap();
+}
+
+#[tauri::command]
+fn get_device_status(device_status: State<'_, AppState>) -> bool {
+  let val = device_status.0.lock().unwrap();
+  return *val
+}
+
 fn show_window(window:Window) {
   window.show().expect("error when showing window");
   window.set_focus().expect("error when setting focus");
@@ -49,14 +68,18 @@ fn track_device_input(window: Window, vid:u16, pid:u16) {
       Ok(res) => {
         println!("Read: {:?}", &buf[..res]);
         //window.emit("received-data", PayloadData { data: &buf[..res] }).unwrap();
-        simulate_key(buf[0], "C:\\Program Files\\AutoHotkey\\AutoHotkey.exe", "C:\\Users\\joshu\\Desktop\\my-script.ahk");
+        //simulate_key(buf[0], "C:\\Program Files\\AutoHotkey\\AutoHotkey.exe", "C:\\Users\\joshu\\Desktop\\my-script.ahk");
         thread::sleep(Duration::from_millis(1000));
       },
       Err(error) => {
         println!("Problem opening the file: {:?}", error);
         window.emit("connection-change", PayloadStatus { status: false }).unwrap();
+        let state: State<'_, AppState> = window.state();
+        let mut val = state.0.lock().unwrap();
+        *val = false;
+        let cloned_window = window.clone();
         thread::spawn(move || {
-          find_device(window);
+          find_device(cloned_window);
         });
         return
       },
@@ -74,10 +97,14 @@ fn find_device(window: Window) {
       if device.product_string() == Some("Tile Core") {
         println!("found tile");
         window.emit("connection-change", PayloadStatus { status: true }).unwrap();
+        let state: State<'_, AppState> = window.state();
+        let mut val = state.0.lock().unwrap();
+        *val = true;
         let vid = device.vendor_id();
         let pid = device.product_id();
+        let cloned_window = window.clone();
         thread::spawn(move || {
-          track_device_input(window, vid, pid);
+          track_device_input(cloned_window, vid, pid);
         });
         return
       }
@@ -87,6 +114,13 @@ fn find_device(window: Window) {
 }
 
 fn main() {
+  // create db
+  //let db = PickleDb::new("settings.db", PickleDbDumpPolicy::AutoDump, SerializationMethod::Json);
+  // if db.exists("ahk-path") {
+  //   let path = db.get::<String>("ahk-path").unwrap();
+  //   println!("The ahk path is: {}", path);
+  // }
+
   // create system tray menu
   let open = CustomMenuItem::new("open".to_string(), "Open");
   let quit = CustomMenuItem::new("quit".to_string(), "Quit");
@@ -101,6 +135,7 @@ fn main() {
   // build
   let context = tauri::generate_context!();
   tauri::Builder::default()
+    .manage(AppState(Default::default()))
     .setup(|app| {
       let handle = app.handle();
       let main_window = app.get_window("main").unwrap();
@@ -151,7 +186,7 @@ fn main() {
       }
       _ => {}
     })
-    .invoke_handler(tauri::generate_handler![simulate_key])
+    .invoke_handler(tauri::generate_handler![simulate_key, update_ahk_path, get_device_status])
     .run(context)
     .expect("error while running tauri application");
 }

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { invoke } from '@tauri-apps/api/tauri'
+import { Link } from "react-router-dom"
+import { FiSettings } from "react-icons/fi"
 import "./Topbar.scss";
 import { useAppContext } from "../contexts/AppContext";
 
@@ -9,18 +11,17 @@ export default function Topbar() {
 
   // const [name, setName] = useState("My Tiles")
 
-  // const [ahkPath, setAhkPath] = useState("C:\\Program Files\\AutoHotkey\\AutoHotkey.exe")
-  const [ahkPath, setAhkPath] = useState("")
-  const [scriptPath, setScriptPath] = useState("C:\\Users\\joshu\\Desktop\\my-script.ahk")
-
   return (
     <>
       <div className="topbar-left">
         <p className={`status ${connected && "positive"}`}>{connected ? "ON" : "OFF"}</p>
-        <input type={"file"} accept=".exe"
-          value={ahkPath} onChange={e => setAhkPath(e.target.value)} />
-        <input value={scriptPath}
-          onChange={e => setScriptPath(e.target.value)} />
+        <button onClick={async () => {
+          const val = await invoke("get_device_status")
+          console.log(val)
+        }}>get</button>
+      </div>
+      <div className="topbar-right">
+        <Link to={"/settings"} className={"btn-settings"}><FiSettings size={16}/></Link>
       </div>
     </>
   )

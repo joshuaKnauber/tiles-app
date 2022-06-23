@@ -7,13 +7,16 @@
     "distDir": "../build"
   },
   "package": {
-    "productName": "tiles-app",
-    "version": "0.1.0"
+    "productName": "Tiles",
+    "version": "0.0.1"
   },
   "tauri": {
     "allowlist": {
       "notification": {
         "all": true
+      },
+      "dialog": {
+        "open": true
       }
     },
     "bundle": {

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { listen } from '@tauri-apps/api/event';
+import { invoke } from '@tauri-apps/api';
 import { send_notification } from '../utils/notification';
 
 
@@ -12,6 +13,8 @@ export const AppProvider = ({ children }) => {
   const navigate = useNavigate()
 
   const [connected, setConnected] = useState(false)
+
+  const [ahkPath, setAhkPath] = useState("")
 
   useEffect(() => {
     const unlisten = listen('connection-change', event => {
@@ -29,8 +32,25 @@ export const AppProvider = ({ children }) => {
     }
   }, [navigate])
 
+  const initializeBackendValues = async () => {
+    const deviceStatus = await invoke("get_device_status")
+    setConnected(deviceStatus)
+  }
+
+  const updateAhkPath = (newPath) => {
+    setAhkPath(newPath)
+    invoke("update_ahk_path", { path: newPath })
+  }
+
+  useEffect(() => {
+    initializeBackendValues()
+  }, [])
+
   const appState = {
     connected,
+
+    ahkPath,
+    updateAhkPath
   }
 
   return (
