@@ -13,22 +13,26 @@ use std::process::Command;
 use std::time::Duration;
 
 #[derive(Clone, serde::Serialize)]
-struct Payload {
+struct PayloadStatus {
   status: bool,
 }
 
+#[derive(Clone, serde::Serialize)]
+struct PayloadData {
+  data: String,
+}
+
 #[tauri::command]
-fn simulate_key(volume: String, ahk_path: String, script_path: String) {
+fn simulate_key(volume: u8, ahk_path: &str, script_path: &str) {
   println!("volume {}", volume);
   Command::new(ahk_path)
     .arg(script_path)
-    .arg(volume)
+    .arg(volume.to_string())
     .output()
     .expect("failed to execute process");
 }
 
 fn show_window(window:Window) {
-  //window.unminimize().expect("error when unminimizing");
   window.show().expect("error when showing window");
   window.set_focus().expect("error when setting focus");
   window.request_user_attention(Some(UserAttentionType::Informational)).expect("error when requesting attention");
@@ -44,11 +48,13 @@ fn track_device_input(window: Window, vid:u16, pid:u16) {
     match device.read(&mut buf[..]) {
       Ok(res) => {
         println!("Read: {:?}", &buf[..res]);
+        //window.emit("received-data", PayloadData { data: &buf[..res] }).unwrap();
+        simulate_key(buf[0], "C:\\Program Files\\AutoHotkey\\AutoHotkey.exe", "C:\\Users\\joshu\\Desktop\\my-script.ahk");
         thread::sleep(Duration::from_millis(1000));
       },
       Err(error) => {
         println!("Problem opening the file: {:?}", error);
-        window.emit("connection-change", Payload { status: false }).unwrap();
+        window.emit("connection-change", PayloadStatus { status: false }).unwrap();
         thread::spawn(move || {
           find_device(window);
         });
@@ -67,7 +73,7 @@ fn find_device(window: Window) {
     for device in api.device_list() {
       if device.product_string() == Some("Tile Core") {
         println!("found tile");
-        window.emit("connection-change", Payload { status: true }).unwrap();
+        window.emit("connection-change", PayloadStatus { status: true }).unwrap();
         let vid = device.vendor_id();
         let pid = device.product_id();
         thread::spawn(move || {

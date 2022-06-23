@@ -19,7 +19,7 @@ export default function Tile({ placeholder=false, core=false, title="" }) {
   const goToTile = () => {
     if (placeholder) return
     if (params.tileId === id) {
-      navigate('/')
+      navigate('/tiles')
     } else {
       navigate(`/tiles/${id}`)
     }

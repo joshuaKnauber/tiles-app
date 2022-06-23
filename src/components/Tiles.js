@@ -22,7 +22,7 @@ export default function Tiles() {
         </SimpleBar>
         <div className={`settings-container ${params.tileId && 'visible'}`}>
           <p>{params.tileId}</p>
-          <Link to={'/'}>Home</Link>
+          <Link to={'/tiles'}>Home</Link>
         </div>
       </div>
     </div>

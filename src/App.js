@@ -3,6 +3,7 @@ import { appWindow } from '@tauri-apps/api/window'
 import { Route, Routes } from 'react-router-dom';
 import './App.scss';
 import Tiles from './components/Tiles';
+import ConnectInfo from './components/ConnectInfo';
 
 function App() {
 
@@ -10,7 +11,8 @@ function App() {
     <div className="App">
 
       <Routes>
-        <Route path="/" element={<Tiles />} />
+        <Route path="/" element={<ConnectInfo />} />
+        <Route path="/tiles" element={<Tiles />} />
         <Route path="/tiles/:tileId" element={<Tiles />} />
       </Routes>
 
