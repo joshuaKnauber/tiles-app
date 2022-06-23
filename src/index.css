@@ -1,13 +1,13 @@
 :root {
   --window: white;
-
-  --bg-main: hsl(220, 15%, 90%);
+  
   --bg-container: hsl(220, 20%, 95%);
-    
-  --bg-main--overlay: rgba(0, 0, 0, 0.2);
+  
   --bg-container--overlay: rgba(0, 0, 0, 0.5);
-
+  
   --text-main: black;
+
+  --scrollbar-window: rgba(0, 0, 0, .2);
   
   --accent-core: hsl(35, 95%, 60%);
   --accent-neutral: hsla(0, 0%, 20%, 0.6);
@@ -22,13 +22,13 @@
   :root {
     --window: black;
     
-    --bg-main: rgb(10, 10, 12);
     --bg-container: rgb(24, 24, 28);
     
-    --bg-main--overlay: rgba(255, 255, 255, 0.2);
     --bg-container--overlay: rgba(255, 255, 255, 0.5);
 
     --text-main: white;
+  
+    --scrollbar-window: rgba(255, 255, 255, .2);
     
     --accent-core: hsl(35, 95%, 60%);
     --accent-neutral: hsla(0, 0%, 90%, 0.6);
@@ -47,6 +47,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;
 
-  background-color: var(--bg-main);
+  background-color: var(--window);
   color: var(--text-main);
+}
+
+.simplebar-scrollbar.simplebar-visible::before {
+  background-color: var(--scrollbar-window);
 }

@@ -1,4 +1,4 @@
-$grid-gap: 1rem;
+$grid-gap: 1.2rem;
 $tile-size: 8rem;
 $connector-size: 1.8rem;
 
@@ -31,7 +31,7 @@ $connector-size: 1.8rem;
         background-color: var(--bg-container);
         transition: transform .1s ease-in-out;
         box-shadow: var(--box-shadow--small);
-
+        
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -52,7 +52,7 @@ $connector-size: 1.8rem;
         }
 
         p {
-            font-size: 1rem;
+            font-size: .9rem;
             margin: 0px;
             font-weight: 600;
             padding: 0px .5rem;

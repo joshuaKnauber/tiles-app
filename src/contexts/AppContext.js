@@ -14,16 +14,17 @@ export const AppProvider = ({ children }) => {
 
   const [connected, setConnected] = useState(false)
 
-  const [ahkPath, setAhkPath] = useState("")
+  const [ahkPath, setAhkPath] = useState("C:\\Program Files\\AutoHotkey\\AutoHotkey.exe")
+  const [scriptPath, setScriptPath] = useState("C:\\Users\\joshu\\Desktop\\my-script.ahk")
 
   useEffect(() => {
     const unlisten = listen('connection-change', event => {
       setConnected(event.payload.status)
       if (event.payload.status) {
         navigate("/tiles")
-        send_notification("Connected", "Your Tile has been connected!")
+        send_notification("Connected", "Tile connected!")
       } else {
-        send_notification("Disconnected", "Your Tile has been disconnected!")
+        send_notification("Disconnected", "Tile disconnected!")
       }
     })
     return () => {
@@ -50,7 +51,9 @@ export const AppProvider = ({ children }) => {
     connected,
 
     ahkPath,
-    updateAhkPath
+    updateAhkPath,
+    scriptPath,
+    setScriptPath,
   }
 
   return (

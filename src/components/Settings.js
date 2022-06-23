@@ -6,15 +6,13 @@ import './Settings.scss';
 
 export default function Settings() {
 
-  const { ahkPath, updateAhkPath } = useAppContext()
-
-  // const [ahkPath, setAhkPath] = useState("C:\\Program Files\\AutoHotkey\\AutoHotkey.exe")
-  const [scriptPath, setScriptPath] = useState("C:\\Users\\joshu\\Desktop\\my-script.ahk")
+  const { ahkPath, updateAhkPath, scriptPath, setScriptPath } = useAppContext()
 
   const getAhkFile = async () => {
     const selected = await open({
       title: "Select AutoHotkey.exe",
       multiple: false,
+      defaultPath: ahkPath,
       filters: [{ name: "Extensions", extensions: ["exe"] }]
     });
     if (selected) {
@@ -22,13 +20,25 @@ export default function Settings() {
     }
   }
 
+  const getScriptFile = async () => {
+    const selected = await open({
+      title: "Select Autohotkey Script",
+      multiple: false,
+      defaultPath: scriptPath,
+      filters: [{ name: "Extensions", extensions: ["ahk"] }]
+    });
+    if (selected) {
+      setScriptPath(selected)
+    }
+  }
+
   return (
     <div className="container">
       <Link to={"/tiles"}>back</Link>
-      <p>path: {ahkPath}</p>
-      <button onClick={getAhkFile}>select file</button>
-      <input value={scriptPath}
-        onChange={e => setScriptPath(e.target.value)} />
+      <p>exe: {ahkPath}</p>
+      <button onClick={getAhkFile}>Select AutoHotkey.exe</button>
+      <p>script: {scriptPath}</p>
+      <button onClick={getScriptFile}>Select Autohotkey Script</button>
     </div>
   )
 }

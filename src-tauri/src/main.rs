@@ -25,7 +25,7 @@ struct PayloadStatus {
 
 #[derive(Clone, serde::Serialize)]
 struct PayloadData {
-  data: String,
+  data: u8,
 }
 
 #[tauri::command]
@@ -67,8 +67,7 @@ fn track_device_input(window: Window, vid:u16, pid:u16) {
     match device.read(&mut buf[..]) {
       Ok(res) => {
         println!("Read: {:?}", &buf[..res]);
-        //window.emit("received-data", PayloadData { data: &buf[..res] }).unwrap();
-        //simulate_key(buf[0], "C:\\Program Files\\AutoHotkey\\AutoHotkey.exe", "C:\\Users\\joshu\\Desktop\\my-script.ahk");
+        window.emit("received-data", PayloadData { data: buf[..res][0] }).unwrap();
         thread::sleep(Duration::from_millis(1000));
       },
       Err(error) => {
