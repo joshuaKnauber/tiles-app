@@ -21,8 +21,9 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --window: black;
+    --window: rgb(12, 12, 16);
     
-    --bg-container: rgb(24, 24, 28);
+    --bg-container: rgb(28, 28, 32);
     
     --bg-container--overlay: rgba(255, 255, 255, 0.5);
 

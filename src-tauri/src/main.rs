@@ -29,13 +29,24 @@ struct PayloadData {
 }
 
 #[tauri::command]
-fn simulate_key(volume: u8, ahk_path: &str, script_path: &str) {
+fn simulate_key(volume: u8, ahk_path: &str, script_path: &str) -> String {
   println!("volume {}", volume);
-  Command::new(ahk_path)
+  let result = Command::new(ahk_path)
     .arg(script_path)
     .arg(volume.to_string())
-    .output()
-    .expect("failed to execute process");
+    .output();
+
+  match result {
+    Ok(res) => {
+      println!("Ran ahk command");
+    },
+    Err(error) => {
+      println!("Problem running ahk command: {:?}", error);
+      return String::from(error.to_string());
+    },
+  };
+  
+  return String::from("");
 }
 
 #[tauri::command]

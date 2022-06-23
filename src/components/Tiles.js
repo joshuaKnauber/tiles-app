@@ -21,8 +21,8 @@ export default function Tiles() {
           <Grid/>
         </SimpleBar>
         <div className={`settings-container ${params.tileId && 'visible'}`}>
-          <p>{params.tileId}</p>
-          <Link to={'/tiles'}>Home</Link>
+          <h2>{params.tileId}</h2>
+          <Link to={'/tiles'}>Close</Link>
         </div>
       </div>
     </div>

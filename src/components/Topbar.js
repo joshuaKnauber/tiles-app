@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { invoke } from '@tauri-apps/api/tauri'
 import { listen } from "@tauri-apps/api/event";
+import { message } from '@tauri-apps/api/dialog';
 import { Link } from "react-router-dom"
 import { FiSettings } from "react-icons/fi"
 import "./Topbar.scss";
@@ -8,7 +9,7 @@ import { useAppContext } from "../contexts/AppContext";
 
 export default function Topbar() {
   
-  const { connected } = useAppContext()
+  const { connected, ahkPath, scriptPath } = useAppContext()
 
   const [lastData, setLastData] = useState(0)
   useEffect(() => {
@@ -33,6 +34,12 @@ export default function Topbar() {
         }}>get</button>*/}
       </div>
       <div className="topbar-right">
+        <button onClick={async () => {
+          const error = await invoke("simulate_key", { volume: lastData, ahkPath: ahkPath, scriptPath: scriptPath })
+          if (error) {
+            await message(error, { title: 'Error', type: 'error' });
+          }
+        }}>Run Script</button>
         <Link to={"/settings"} className={"btn-settings"}><FiSettings size={16}/></Link>
       </div>
     </>
